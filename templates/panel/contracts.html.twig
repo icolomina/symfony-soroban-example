@@ -1,0 +1,36 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Contracts{% endblock %}
+
+{% block body %}
+
+<table class="table">
+    <thead>
+        <tr>
+        <th scope="col">#</th>
+        <th scope="col">Sender</th>
+        <th scope="col">Receiver</th>
+        <th scope="col">Enabled</th>
+        <th scope="col">Label</th>
+        <th scope="col">Description</th>
+        <th scope="col">Address</th>
+        <th scope="col">Created At</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for contract in contracts %}
+            <tr>
+                <th scope="row">{{ contract.id }}</th>
+                <td>{{ contract.sender.email }}</td>
+                <td>{{ contract.receiver.email }}</td>
+                <td>{{ contract.enabled }}</td>
+                <td>{{ contract.label }}</td>
+                <td>{{ contract.description }}</td>
+                <td>{{ contract.address }}</td>
+                <td>{{ contract.createdAt | date("Y-m-d H:i") }}</td>
+            </tr>
+        {% endfor %}
+    </tbody>
+    </table>
+
+{% endblock %}

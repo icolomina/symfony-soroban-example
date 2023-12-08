@@ -1,0 +1,27 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Create contract{% endblock %}
+
+{% block body %}
+
+<form {{ stimulus_controller('contract') }} method="POST" action="{{ path('panel_user_post_contract') }}">
+  <div class="mb-3">
+    <label for="receiver" class="form-label">Receiver email</label>
+    <input {{ stimulus_target('contract', 'receiver') }} type="email" class="form-control" id="receiver" name="receiver" aria-describedby="emailHelp">
+  </div>
+  <div class="mb-3">
+    <label for="label" class="form-label">label</label>
+    <input {{ stimulus_target('contract', 'label') }} type="text" class="form-control" id="label" name="label">
+  </div>
+  <div class="mb-3">
+    <label for="description" class="form-label">Description</label>
+    <input {{ stimulus_target('contract', 'description') }} type="text" class="form-control" id="description" name="description">
+  </div>
+  <div class="mb-3">
+    <label for="token" class="form-label">Token</label>
+    <input {{ stimulus_target('contract', 'token') }} type="text" class="form-control" id="token" name="token">
+  </div>
+  <button type="button" class="btn btn-primary" {{ stimulus_action('contract', 'createContract') }}>Create contract</button>
+</form>
+
+{% endblock %}
