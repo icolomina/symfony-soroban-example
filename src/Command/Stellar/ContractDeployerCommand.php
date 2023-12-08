@@ -5,7 +5,6 @@ namespace App\Command\Stellar;
 use App\Stellar\Soroban\AccountManager;
 use App\Stellar\Soroban\Contract\DeployManager;
 use App\Stellar\Soroban\Contract\WasmManager;
-use Soneso\StellarSDK\Crypto\KeyPair;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -26,11 +25,6 @@ class ContractDeployerCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $kp = KeyPair::fromPublicKey('GCQAG6XYS3PDS3TWAQWYMEGXYV3KTUXIONRNEFKN3MDE7MUXHZXD7DI4');
-        dump($kp);
-        die;
-
-
         $keyPair = $this->accountManager->getSystemKeyPair();
         $account = $this->accountManager->getAccount($keyPair);
 
