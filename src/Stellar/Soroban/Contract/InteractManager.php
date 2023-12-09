@@ -8,10 +8,12 @@ use App\Stellar\Soroban\Networks;
 use App\Stellar\Soroban\ServerManager;
 use App\Stellar\Soroban\Transaction\SorobanTransactionManager;
 use Soneso\StellarSDK\Crypto\KeyPair;
+use Soneso\StellarSDK\Crypto\StrKey;
 use Soneso\StellarSDK\InvokeContractHostFunction;
 use Soneso\StellarSDK\InvokeHostFunctionOperationBuilder;
 use Soneso\StellarSDK\Soroban\Address;
 use Soneso\StellarSDK\TransactionBuilder;
+use Soneso\StellarSDK\Xdr\XdrSCAddress;
 
 class InteractManager {
 
@@ -22,20 +24,14 @@ class InteractManager {
         private readonly SorobanTransactionManager $sorobanTransactionManager,
     ){}
 
-    public function initContract(Contract $contract): mixed
+    public function initContract(Contract $contract): bool
     {
         $keyPair = $this->accountManager->getSystemKeyPair();
         $account = $this->accountManager->getAccount($keyPair);
 
-        $senderKp = KeyPair::fromPublicKey($contract->getSender()->getAddress());
-        $receiverKp = KeyPair::fromPublicKey($contract->getReceiver()->getAddress());
-        $tokenKp = KeyPair::fromPublicKey($contract->getToken()->getAddress());
-
         $invokeContractHostFunction = new InvokeContractHostFunction($contract->getAddress(), "init", [
-            Address::fromAccountId($account->getAccountId()),
-            Address::fromAccountId($senderKp->getAccountId()),
-            Address::fromAccountId($receiverKp->getAccountId()),
-            Address::fromAccountId($tokenKp->getAccountId())
+            Address::fromAccountId($account->getAccountId())->toXdrSCVal(),
+            Address::fromContractId($contract->getToken()->getAddress())->toXdrSCVal()
         ]);
 
         $builder = new InvokeHostFunctionOperationBuilder($invokeContractHostFunction);
@@ -48,6 +44,11 @@ class InteractManager {
         $sendResponse = $server->sendTransaction($transaction);
         $transactionResponse = $this->sorobanTransactionManager->waitForTransaction($server, $sendResponse);
 
-        return $transactionResponse->getResultValue();
+        $resultValue = $transactionResponse->getResultValue();
+        if($resultValue->getError()) {
+            throw new \RuntimeException('Contract call execution failed: ' . $resultValue->getError()->getCode()->getValue());
+        }
+
+        return $resultValue->getB();
     }
 }

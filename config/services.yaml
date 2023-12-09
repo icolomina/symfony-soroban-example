@@ -6,8 +6,10 @@
 parameters:
     keys.secret: '%env(SOROBAN_SECRET_KEY)%'
     keys.public: '%env(SOROBAN_PUBLIC_KEY)%'
+    keys.token: '%env(SOROBAN_TOKEN_ADDR)%'
     wasm: '%kernel.project_dir%/contract/target/wasm32-unknown-unknown/release/crypto_bills.wasm'
-    wasm_id: '31434c6522eb9ce72170f895b4db9b87483e6781988d6ad22b855ad6bcc02d9f'
+    wasm_token: '%kernel.project_dir%/token/target/wasm32-unknown-unknown/release/soroban_token_contract.wasm'
+    wasm_id: 'c04b56c7605b10c7f6b175b2594e6eaae5d5c491693cb2ed0d5d30dbdd2876f5'
 
 services:
     # default configuration for services in *this* file
@@ -17,7 +19,9 @@ services:
         bind:
             $secret: '%keys.secret%'
             $wasmFile: '%wasm%'
+            $wasmTokenFile: '%wasm_token%'
             $wasmId: '%wasm_id%'
+            $sorobanTokenAddr: '%keys.token%'
 
     # makes classes in src/ available to be used as services
     # this creates a service per class whose id is the fully-qualified class name

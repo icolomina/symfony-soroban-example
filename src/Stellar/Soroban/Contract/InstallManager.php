@@ -23,12 +23,13 @@ class InstallManager {
         private readonly AccountManager $accountManager
     ){ }
 
-    public function installContract(): string
+    public function installContract(?string $wasmId = null): string
     {
         $keyPair = $this->accountManager->getSystemKeyPair();
         $account = $this->accountManager->getAccount($keyPair);
+        $wasmToInstall = $wasmId ?? $this->wasmId;
 
-        $createContractHostFunction = new CreateContractHostFunction(Address::fromAccountId($account->getAccountId()), $this->wasmId);
+        $createContractHostFunction = new CreateContractHostFunction(Address::fromAccountId($account->getAccountId()), $wasmToInstall);
         $builder = new InvokeHostFunctionOperationBuilder($createContractHostFunction);
         $operation = $builder->build();   
         $transaction = (new TransactionBuilder($account))->addOperation($operation)->build();
