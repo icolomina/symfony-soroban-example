@@ -4,14 +4,7 @@
 
 {% block body %}
 
-{% if app.user.address is null %}
-    <div class="row" {{ stimulus_controller('wallet') }}>
-        <div class="col">
-            <button type="button" class="btn btn-info" {{ stimulus_action('wallet', 'connectWallet') }}>Connect wallet</button>
-        </div>
-    </div>
-{% else %}
-    <table class="table">
+<table class="table">
     <thead>
         <tr>
         <th scope="col">#</th>
@@ -31,6 +24,5 @@
         {% endfor %}
     </tbody>
     </table>
-{% endif %}
 
 {% endblock %}

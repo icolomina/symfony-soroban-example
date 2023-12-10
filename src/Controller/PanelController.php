@@ -64,10 +64,11 @@ class PanelController extends AbstractController
     }
 
     #[Route('/user/deposit-send', name: 'panel_user_post_deposit', methods: ['POST'])]
-    public function postSendDeposit(EntityManagerInterface $em, InteractManager $interactManager): JsonResponse
+    public function postSendDeposit(Request $request, EntityManagerInterface $em, InteractManager $interactManager): JsonResponse
     {
+        $body = json_decode($request->getContent(), true);
         $contract = $em->getRepository(Contract::class)->findOneBy(['sender' => $this->getUser()]);
-        $balance  = $interactManager->depositInContract($contract);
+        $balance  = $interactManager->depositInContract($contract, (int)$body['amount']);
 
         return new JsonResponse(['balance' => $balance]);
     }

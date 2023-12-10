@@ -6,6 +6,8 @@ use App\Entity\User;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 use Soneso\StellarSDK\Crypto\KeyPair;
+use Soneso\StellarSDK\Util\FriendBot;
+use Soneso\StellarSDK\Util\FuturenetFriendBot;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class UserFixtures extends Fixture
@@ -18,6 +20,9 @@ class UserFixtures extends Fixture
     {
         $keyPair1 = KeyPair::random();
         $keyPair2 = KeyPair::random();
+
+        FriendBot::fundTestAccount($keyPair1->getAccountId());
+        FriendBot::fundTestAccount($keyPair2->getAccountId());
 
         $user1 = new User();
         $user1->setEmail('user1@domain.com');

@@ -54,7 +54,7 @@ class InteractManager {
         return $resultValue->getB();
     }
 
-    public function depositInContract(Contract $contract): int
+    public function depositInContract(Contract $contract, int $amount): int
     {
         $keyPairSubmiter = $this->accountManager->getSystemKeyPair();
         $keyPairInvoker  = KeyPair::fromSeed($contract->getSender()->getSecret());
@@ -63,7 +63,7 @@ class InteractManager {
 
         $invokeContractHostFunction = new InvokeContractHostFunction($contract->getAddress(), "deposit", [
             Address::fromAccountId($accountInvoker->getAccountId())->toXdrSCVal(),
-            XdrSCVal::forI128(new XdrInt128Parts(10000, 0)),
+            XdrSCVal::forI128(new XdrInt128Parts($amount, 0)),
         ]);
 
         $builder = new InvokeHostFunctionOperationBuilder($invokeContractHostFunction);
