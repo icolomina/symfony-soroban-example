@@ -6,6 +6,8 @@ use App\Contract\ContractManager;
 use App\Entity\Contract;
 use App\Request\Input\CreateContractInput;
 use App\User\UserManager;
+use Doctrine\ORM\EntityManagerInterface;
+use Soneso\StellarSDK\Crypto\StrKey;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -51,5 +53,12 @@ class PanelController extends AbstractController
     {
         $contracts = $contractManager->getContracts();
         return $this->render('panel/contracts.html.twig', [ 'contracts' => $contracts ]);
+    }
+
+    #[Route('/user/deposit-create', name: 'panel_user_get_deposit_form', methods: ['GET'])]
+    public function getSendDeposit(EntityManagerInterface $em): Response
+    {
+        $contract = $em->getRepository(Contract::class)->findOneBy(['sender' => $this->getUser()]);
+        return $this->render('panel/create_deposit.html.twig', ['contract' => StrKey::encodeContractIdHex($contract->getAddress())]);
     }
 }

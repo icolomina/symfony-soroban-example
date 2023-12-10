@@ -1,0 +1,15 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Create contract{% endblock %}
+
+{% block body %}
+
+<form {{ stimulus_controller('deposit', { 'contract' : contract }) }} method="POST" action="#">
+  <div class="mb-3">
+    <label for="amount" class="form-label">Amount</label>
+    <input {{ stimulus_target('deposit', 'amount') }} type="text" class="form-control" id="amount" name="amount" aria-describedby="amountHelp">
+  </div>
+  <button type="button" class="btn btn-primary" {{ stimulus_action('deposit', 'sendDeposit') }}>Send deposit</button>
+</form>
+
+{% endblock %}
