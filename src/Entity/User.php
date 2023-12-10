@@ -36,6 +36,9 @@ class User implements UserInterface,PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private ?\DateTimeImmutable $createdAt = null;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $secret;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -133,5 +136,17 @@ class User implements UserInterface,PasswordAuthenticatedUserInterface
     public function eraseCredentials()
     {
         
+    }
+
+    public function getSecret(): ?string
+    {
+        return $this->secret;
+    }
+
+    public function setSecret(string $secret): static
+    {
+        $this->secret = $secret;
+
+        return $this;
     } 
 }

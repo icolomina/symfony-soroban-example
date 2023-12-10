@@ -13,7 +13,9 @@ use Soneso\StellarSDK\InvokeContractHostFunction;
 use Soneso\StellarSDK\InvokeHostFunctionOperationBuilder;
 use Soneso\StellarSDK\Soroban\Address;
 use Soneso\StellarSDK\TransactionBuilder;
+use Soneso\StellarSDK\Xdr\XdrInt128Parts;
 use Soneso\StellarSDK\Xdr\XdrSCAddress;
+use Soneso\StellarSDK\Xdr\XdrSCVal;
 
 class InteractManager {
 
@@ -50,5 +52,35 @@ class InteractManager {
         }
 
         return $resultValue->getB();
+    }
+
+    public function depositInContract(Contract $contract): int
+    {
+        $keyPairSubmiter = $this->accountManager->getSystemKeyPair();
+        $keyPairInvoker  = KeyPair::fromSeed($contract->getSender()->getSecret());
+        $accountSubmiter = $this->accountManager->getAccount($keyPairSubmiter);
+        $accountInvoker  = $this->accountManager->getAccount($keyPairInvoker);
+
+        $invokeContractHostFunction = new InvokeContractHostFunction($contract->getAddress(), "deposit", [
+            Address::fromAccountId($accountInvoker->getAccountId())->toXdrSCVal(),
+            XdrSCVal::forI128(new XdrInt128Parts(10000, 0)),
+        ]);
+
+        $builder = new InvokeHostFunctionOperationBuilder($invokeContractHostFunction);
+        $operation = $builder->build();
+        $transaction = (new TransactionBuilder($accountSubmiter))->addOperation($operation)->build();
+
+        $server = $this->serverManager->getServer(Networks::TESTNET);
+        $this->sorobanTransactionManager->simulate($server, $transaction, $keyPairSubmiter, true, $keyPairInvoker);
+
+        $sendResponse = $server->sendTransaction($transaction);
+        $transactionResponse = $this->sorobanTransactionManager->waitForTransaction($server, $sendResponse);
+
+        $resultValue = $transactionResponse->getResultValue();
+        if($resultValue->getError()) {
+            throw new \RuntimeException('Contract call execution failed: ' . $resultValue->getError()->getCode()->getValue());
+        }
+
+        return $resultValue->getI128()->getHi();
     }
 }

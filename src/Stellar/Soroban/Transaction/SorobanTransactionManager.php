@@ -6,12 +6,13 @@ use Soneso\StellarSDK\Crypto\KeyPair;
 use Soneso\StellarSDK\Network;
 use Soneso\StellarSDK\Soroban\Responses\GetTransactionResponse;
 use Soneso\StellarSDK\Soroban\Responses\SendTransactionResponse;
+use Soneso\StellarSDK\Soroban\SorobanAuthorizationEntry;
 use Soneso\StellarSDK\Soroban\SorobanServer;
 use Soneso\StellarSDK\Transaction;
 
 class SorobanTransactionManager {
 
-    public function simulate(SorobanServer $server, Transaction $transaction, KeyPair $keyPair, bool $addAuth = false): void
+    public function simulate(SorobanServer $server, Transaction $transaction, KeyPair $keyPair, bool $addAuth = false, ?KeyPair $invoker = null): void
     {
         $simulateResponse = $server->simulateTransaction($transaction);
 
@@ -25,7 +26,19 @@ class SorobanTransactionManager {
         $transaction->setSorobanTransactionData($transactionData);
         $transaction->addResourceFee($minResourceFee);
         if($addAuth) {
-            $transaction->setSorobanAuth($simulateResponse->getSorobanAuth());
+            if($invoker) {
+                $auth = $simulateResponse->getSorobanAuth();
+                $latestLedgerResponse = $server->getLatestLedger();
+                foreach ($auth as $a) {
+                    if ($a instanceof  SorobanAuthorizationEntry) {
+                        $a->credentials->addressCredentials->signatureExpirationLedger = $latestLedgerResponse->sequence + 10;
+                        $a->sign($invoker, Network::testnet());
+                    }
+                }
+            }
+            else{
+                $transaction->setSorobanAuth($simulateResponse->getSorobanAuth());
+            }
         }
         $transaction->sign($keyPair, Network::testnet());
     }

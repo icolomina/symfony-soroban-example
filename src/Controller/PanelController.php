@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Contract\ContractManager;
 use App\Entity\Contract;
 use App\Request\Input\CreateContractInput;
+use App\Stellar\Soroban\Contract\InteractManager;
 use App\User\UserManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Soneso\StellarSDK\Crypto\StrKey;
@@ -60,5 +61,14 @@ class PanelController extends AbstractController
     {
         $contract = $em->getRepository(Contract::class)->findOneBy(['sender' => $this->getUser()]);
         return $this->render('panel/create_deposit.html.twig', ['contract' => StrKey::encodeContractIdHex($contract->getAddress())]);
+    }
+
+    #[Route('/user/deposit-send', name: 'panel_user_post_deposit', methods: ['POST'])]
+    public function postSendDeposit(EntityManagerInterface $em, InteractManager $interactManager): JsonResponse
+    {
+        $contract = $em->getRepository(Contract::class)->findOneBy(['sender' => $this->getUser()]);
+        $balance  = $interactManager->depositInContract($contract);
+
+        return new JsonResponse(['balance' => $balance]);
     }
 }
