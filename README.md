@@ -23,6 +23,13 @@ soroban contract build
 This command creates the contract wasm file on the folder *target/wasm32-unknown-unknown/release*. You don't have to move the wasm file to any folder. The project will search and get wasm
 file contents for you.
 
+### Create a Key pair 
+We need to create a key pair so the project can deploy the contract. Go to the [stellar laboratory](https://laboratory.stellar.org/) and follow the next steps: 
+- Select the *test* network and the *Create Account* tab.
+- Click on the *Generate keypair* button. You will se a new public and private key.
+- Copy the public key and paste it in the input bellow. Then click on *Get test network lumens* to fund the account.
+- Save the public and private keys since we will need them later.
+
 ### The token
 The project needs a token so the contract can transfer the funds. We can use the [soroban-token-example](https://github.com/stellar/soroban-examples/tree/v20.0.0-rc2/token). 
 First of all, create a new folder called *token* in the root project:
@@ -45,4 +52,21 @@ After ensuring that the tests pass, generate the token contract wasm file:
 ```shell
 soroban contract build
 ```
+To finish, we have to deploy the token contract to the testnet since we will need its address later to initialize our contract. Go to your token folder and deploy it executing the following command:
+
+```shell
+soroban config network add --global testnet \
+  --rpc-url https://soroban-testnet.stellar.org:443 \
+  --network-passphrase "Test SDF Network ; September 2015"
+
+soroban contract deploy \
+  --wasm target/wasm32-unknown-unknown/release/soroban-token-wasm.wasm \
+  --source <your_private_key> \
+  --network testnet
+```
+> The first command is only necessary if you have not added the testnet network so far.
+
+The deploy contract will return the contract identifier. Save it since we'll also need it later.
+
+Now, we have to initialize the token contract:
 
