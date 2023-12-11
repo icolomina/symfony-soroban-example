@@ -70,3 +70,38 @@ The deploy contract will return the contract identifier. Save it since we'll als
 
 Now, we have to initialize the token contract:
 
+## Preparing the environment
+Now we have the contract wams and the token deployed and initialized, we can start to prepare the application enviroment.
+
+### Install dependencies
+This project uses two kind of dependencies, php dependencies which are managed with composer and javascript dependencies which are manager with npm. To install both of them, execute the following commands in your project root folder:
+```shell
+composer install
+npm install
+```
+
+### The enviroment vars
+This project holds a *.env.dist* with the environment variables required. Create a *.env* file (or rename the *.env.dist* file) and set the corresponding values to the variables:
+
+- **SOROBAN_SECRET_KEY**: The secret key we generated on the stellar laboratory
+- **SOROBAN_PUBLIC_KEY**: The public key we generated on the stellar laboratory
+- **SOROBAN_TOKEN_ADDR**: The token contract address we generated in the last section
+- **APP_SECRET**: This var is not important. Yo can set a random string
+- **DATABASE_URL**: Holds the database connection uri. Change the file name by one of yout choice
+
+### Initialize the database
+Before creating the database install [sqlite](https://www.sqlite.org/index.html).
+```shell
+sudo apt install sqlite3
+sudo apt install php8.1-sqlite3 
+```
+The project database is managed with [doctrine](https://symfony.com/doc/current/doctrine.html). Execute the following command to create the database
+```shell
+bin/console doctrine:schema:create
+```
+Then, load the database with data using [doctrine fixtures](https://symfony.com/bundles/DoctrineFixturesBundle/current/index.html) command:
+```shell
+bin/console doctrine:fixtures:load
+```
+
+
