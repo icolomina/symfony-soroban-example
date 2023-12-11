@@ -30,7 +30,7 @@ We need to create a key pair so the project can deploy the contract. Go to the [
 - Copy the public key and paste it in the input bellow. Then click on *Get test network lumens* to fund the account.
 - Save the public and private keys since we will need them later.
 
-### The token
+### Test and compile the token
 The project needs a token so the contract can transfer the funds. We can use the [soroban-token-example](https://github.com/stellar/soroban-examples/tree/v20.0.0-rc2/token). 
 First of all, create a new folder called *token* in the root project:
 
