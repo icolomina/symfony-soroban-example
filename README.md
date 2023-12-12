@@ -52,23 +52,21 @@ After ensuring that the tests pass, generate the token contract wasm file:
 ```shell
 soroban contract build
 ```
-To finish, we have to deploy the token contract to the testnet since we will need its address later to initialize our contract. Go to your token folder and deploy it executing the following command:
+To finish, we have to deploy and initialize the token
+- Add the testnet network if you have not added it yet
 
 ```shell
-soroban config network add --global testnet \
-  --rpc-url https://soroban-testnet.stellar.org:443 \
-  --network-passphrase "Test SDF Network ; September 2015"
-
-soroban contract deploy \
-  --wasm target/wasm32-unknown-unknown/release/soroban-token-wasm.wasm \
-  --source <your_private_key> \
-  --network testnet
+soroban config network add --global testnet --rpc-url https://soroban-testnet.stellar.org:443 --network-passphrase "Test SDF Network ; September 2015"
 ```
-> The first command is only necessary if you have not added the testnet network so far.
 
-The deploy contract will return the contract identifier. Save it since we'll also need it later.
+- Deploy the token
+```shell
+bin/console contract:deploy --type=token --install
+```
+The deploy command will return the contract identifier. Save it since we'll also need it later.
 
-Now, we have to initialize the token contract:
+- Initialize the token
+
 
 ## Preparing the environment
 Now we have the contract wams and the token deployed and initialized, we can start to prepare the application enviroment.
