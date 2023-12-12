@@ -7,7 +7,7 @@ The contract code is located under the *contract* folder. It is written in rust 
 - **init**: Initialize the contract.
 - **deposit**: Allows an address to transfer funds from is address to the contract address.
 
-### Test and compile the contract
+### Test and compile and deploy the contract
 Navidate to the contract folder and execute the following command:
 
 ```shell
@@ -23,7 +23,10 @@ soroban contract build
 This command creates the contract wasm file on the folder *target/wasm32-unknown-unknown/release*. You don't have to move the wasm file to any folder. The project will search and get wasm
 file contents for you.
 
-Now deploy the contract so you can 
+Now deploy the contract so you can get the wasm id:
+```shell
+bin/console contract:deploy
+```
 
 ### Create a Key pair 
 We need to create a key pair so the project can deploy the contract. Go to the [stellar laboratory](https://laboratory.stellar.org/) and follow the next steps: 
