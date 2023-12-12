@@ -87,14 +87,14 @@ This project holds a *.env.dist* with the environment variables required. Create
 - **SOROBAN_PUBLIC_KEY**: The public key we generated on the stellar laboratory
 - **SOROBAN_TOKEN_ADDR**: The token contract address we generated in the last section
 - **APP_SECRET**: This var is not important. Yo can set a random string
-- **DATABASE_URL**: Holds the database connection uri. Change the file name by one of yout choice
+- **DATABASE_URL**: Holds the database connection uri. Change the file name by one of your choice
+- **SOROBAN_CONTRACT_WASM_ID**: Holds the contract wasm id which will be used to generate a contract id.
 
-### Deploy the contract
-Deploy the contract so you can get the wasm id. To do it, execute the following command in your project root folder:
+To generate the wasm id, deploy the contract so you can get it. To do it, execute the following command in your project root folder:
 ```shell
 bin/console contract:deploy
 ```
-It will print the wasm id.
+It will print the wasm id. Copy a set is a the *SOROBAN_CONTRACT_WASM_ID* value.
 
 ### Initialize the database
 Before creating the database install [sqlite](https://www.sqlite.org/index.html).
