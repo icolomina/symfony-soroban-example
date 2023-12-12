@@ -23,11 +23,6 @@ soroban contract build
 This command creates the contract wasm file on the folder *target/wasm32-unknown-unknown/release*. You don't have to move the wasm file to any folder. The project will search and get wasm
 file contents for you.
 
-Now deploy the contract so you can get the wasm id:
-```shell
-bin/console contract:deploy
-```
-
 ### Create a Key pair 
 We need to create a key pair so the project can deploy the contract. Go to the [stellar laboratory](https://laboratory.stellar.org/) and follow the next steps: 
 - Select the *test* network and the *Create Account* tab.
@@ -93,6 +88,13 @@ This project holds a *.env.dist* with the environment variables required. Create
 - **SOROBAN_TOKEN_ADDR**: The token contract address we generated in the last section
 - **APP_SECRET**: This var is not important. Yo can set a random string
 - **DATABASE_URL**: Holds the database connection uri. Change the file name by one of yout choice
+
+### Deploy the contract
+Deploy the contract so you can get the wasm id. To do it, execute the following command in your project root folder:
+```shell
+bin/console contract:deploy
+```
+It will print the wasm id.
 
 ### Initialize the database
 Before creating the database install [sqlite](https://www.sqlite.org/index.html).
