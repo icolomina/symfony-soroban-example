@@ -103,5 +103,6 @@ Then, load the database with data using [doctrine fixtures](https://symfony.com/
 ```shell
 bin/console doctrine:fixtures:load
 ```
+The fixtures command generates a new keyPair for each user and funds it with the test friendbot. 
 
 
