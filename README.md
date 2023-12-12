@@ -67,32 +67,38 @@ The deploy command will return the contract identifier. Save it since we'll also
 
 - Initialize the token
 
+```shell
+soroban contract invoke --id <contract_token_id> --source <your_private_key> --network testnet -- initialize --admin <your_public_key> --decimal 4 --name "My Token contract" --symbol "MTI"
+```
+
+Now we have the token ready. In the later sections, we will see how to mint the user accounts with our token.
+
 
 ## Preparing the environment
-Now we have the contract wams and the token deployed and initialized, we can start to prepare the application enviroment.
+Now we have the contract wasm and the token deployed and initialized, we can start to prepare the application enviroment.
 
 ### Install dependencies
-This project uses two kind of dependencies, php dependencies which are managed with composer and javascript dependencies which are manager with npm. To install both of them, execute the following commands in your project root folder:
+This project uses two kinds of dependencies, php dependencies which are managed with composer and javascript dependencies which are manager with npm. To install both of them, execute the following commands in your project root folder:
 ```shell
 composer install
 npm install
 ```
 
-### The enviroment vars
+### The environment vars
 This project holds a *.env.dist* with the environment variables required. Create a *.env* file (or rename the *.env.dist* file) and set the corresponding values to the variables:
 
 - **SOROBAN_SECRET_KEY**: The secret key we generated on the stellar laboratory
 - **SOROBAN_PUBLIC_KEY**: The public key we generated on the stellar laboratory
 - **SOROBAN_TOKEN_ADDR**: The token contract address we generated in the last section
-- **APP_SECRET**: This var is not important. Yo can set a random string
-- **DATABASE_URL**: Holds the database connection uri. Change the file name by one of your choice
+- **APP_SECRET**: This var is not important. You can set a random string
+- **DATABASE_URL**: Holds the database connection uri. Change the file name to one of your choice
 - **SOROBAN_CONTRACT_WASM_ID**: Holds the contract wasm id which will be used to generate a contract id.
 
 To generate the wasm id, deploy the contract so you can get it. To do it, execute the following command in your project root folder:
 ```shell
 bin/console contract:deploy
 ```
-It will print the wasm id. Copy a set is a the *SOROBAN_CONTRACT_WASM_ID* value.
+It will print the wasm id. Copy a set it as the *SOROBAN_CONTRACT_WASM_ID* value.
 
 ### Initialize the database
 Before creating the database install [sqlite](https://www.sqlite.org/index.html).
@@ -104,22 +110,25 @@ The project database is managed with [doctrine](https://symfony.com/doc/current/
 ```shell
 bin/console doctrine:schema:create
 ```
-Then, load the database with data using [doctrine fixtures](https://symfony.com/bundles/DoctrineFixturesBundle/current/index.html) command:
+Then, load the database with data using the [doctrine fixtures](https://symfony.com/bundles/DoctrineFixturesBundle/current/index.html) load command:
 ```shell
 bin/console doctrine:fixtures:load
 ```
-The fixtures command generates a new keyPair for each user and funds it with the test friendbot. The secret seed is stored in the *secret* field and the public key is stored in the *address* field.
-> In a real custodial environment, you should store yous secret keys with a strongest security measures.
+The fixtures command generates a new key pair for each user and funds it with the test friendbot. The secret seed is stored in the *secret* field and the public key is stored in the *address* field.
+> In a real custodial environment, you should store your secret keys with strongest security measures.
 
-Before continuing, we have to mint with tokens to the address of user1 and user2. To do it, let's open first an sqlite shell. Go to your project root folder and execute the following command:
+Before continuing, we have to mint the user1 and user2 addresses. To do it, follow the next steps:
+
+- Open an SQLite shell and query the user table
 ```shell
 sqlite3 var/<yous_name>.db
-```
-Then query the users:
-```sql
 Select * from users
 ```
-Now, mint the users addresses using the following command:
+
+- Mint the user addresses using the following command:
+```shell
+soroban contract invoke --id <token_contract_id> --source <soroban_private_key> --network testnet -- mint  --to <user_public_key>  --amount 500000000000
+```
 
 ## The application
 
@@ -129,13 +138,13 @@ Now, it's time to open the application. Open two terminals and execute the follo
 ```shell
 npm run dev
 ```
-This command copiles the assets and publishes it to the public directory using [symfony webpack](https://symfony.com/doc/current/frontend/encore/index.html)
+This command compiles the assets and publishes them to the public directory using [symfony webpack](https://symfony.com/doc/current/frontend/encore/index.html)
 
 ```shell
 symfony server:start
 ```
 This command starts a development server. 
 
+### Login to the application
 
-
-
+Open a browser and go to the login page: http://127.0.0.1:8000/login
