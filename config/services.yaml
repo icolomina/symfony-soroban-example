@@ -9,7 +9,7 @@ parameters:
     keys.token: '%env(SOROBAN_TOKEN_ADDR)%'
     wasm: '%kernel.project_dir%/contract/target/wasm32-unknown-unknown/release/crypto_bills.wasm'
     wasm_token: '%kernel.project_dir%/token/target/wasm32-unknown-unknown/release/soroban_token_contract.wasm'
-    wasm_id: 'c04b56c7605b10c7f6b175b2594e6eaae5d5c491693cb2ed0d5d30dbdd2876f5'
+    wasm_id: '%env(SOROBAN_CONTRACT_WASM_ID)%'
 
 services:
     # default configuration for services in *this* file
