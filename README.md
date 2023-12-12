@@ -7,7 +7,7 @@ The contract code is located under the *contract* folder. It is written in rust 
 - **init**: Initialize the contract.
 - **deposit**: Allows an address to transfer funds from is address to the contract address.
 
-### Test and compile and deploy the contract
+### Test and compile the contract
 Navidate to the contract folder and execute the following command:
 
 ```shell
