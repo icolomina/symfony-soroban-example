@@ -103,6 +103,34 @@ Then, load the database with data using [doctrine fixtures](https://symfony.com/
 ```shell
 bin/console doctrine:fixtures:load
 ```
-The fixtures command generates a new keyPair for each user and funds it with the test friendbot. 
+The fixtures command generates a new keyPair for each user and funds it with the test friendbot. The secret seed is stored in the *secret* field and the public key is stored in the *address* field.
+> In a real custodial environment, you should store yous secret keys with a strongest security measures.
+
+Before continuing, we have to mint with tokens to the address of user1 and user2. To do it, let's open first an sqlite shell. Go to your project root folder and execute the following command:
+```shell
+sqlite3 var/<yous_name>.db
+```
+Then query the users:
+```sql
+Select * from users
+```
+Now, mint the users addresses using the following command:
+
+## The application
+
+Now, it's time to open the application. Open two terminals and execute the following commands:
+
+- In the first terminal
+```shell
+npm run dev
+```
+This command copiles the assets and publishes it to the public directory using [symfony webpack](https://symfony.com/doc/current/frontend/encore/index.html)
+
+```shell
+symfony server:start
+```
+This command starts a development server. 
+
+
 
 
