@@ -23,6 +23,8 @@ soroban contract build
 This command creates the contract wasm file on the folder *target/wasm32-unknown-unknown/release*. You don't have to move the wasm file to any folder. The project will search and get wasm
 file contents for you.
 
+Now deploy the contract so you can 
+
 ### Create a Key pair 
 We need to create a key pair so the project can deploy the contract. Go to the [stellar laboratory](https://laboratory.stellar.org/) and follow the next steps: 
 - Select the *test* network and the *Create Account* tab.
