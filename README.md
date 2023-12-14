@@ -5,10 +5,10 @@ and interact with the contract.
 ## The contract
 The contract code is located under the *contract* folder. It is written in rust and contains two methods:
 - **init**: Initialize the contract.
-- **deposit**: Allows an address to transfer funds from is address to the contract address.
+- **deposit**: Allows an address to transfer funds to the contract address.
 
 ### Test and compile the contract
-Navidate to the contract folder and execute the following command:
+Navigate to the contract folder and execute the following command:
 
 ```shell
 cargo test
@@ -20,14 +20,13 @@ The last command will compile the contract and then execute the tests. After pas
 ```shell
 soroban contract build
 ```
-This command creates the contract wasm file on the folder *target/wasm32-unknown-unknown/release*. You don't have to move the wasm file to any folder. The project will search and get wasm
-file contents for you.
+This command creates the contract wasm file on the folder *target/wasm32-unknown-unknown/release*. You don't have to move the wasm file to any folder. The project will search and get wasm file contents for you.
 
 ### Create a Key pair 
 We need to create a key pair so the project can deploy the contract. Go to the [stellar laboratory](https://laboratory.stellar.org/) and follow the next steps: 
 - Select the *test* network and the *Create Account* tab.
-- Click on the *Generate keypair* button. You will se a new public and private key.
-- Copy the public key and paste it in the input bellow. Then click on *Get test network lumens* to fund the account.
+- Click on the *Generate keypair* button. You will see a new public and private key.
+- Copy the public key and paste it in the input below. Then click on *Get test network lumens* to fund the account.
 - Save the public and private keys since we will need them later.
 
 ### Test and compile the token
@@ -75,10 +74,10 @@ Now we have the token ready. In the later sections, we will see how to mint the 
 
 
 ## Preparing the environment
-Now we have the contract wasm and the token deployed and initialized, we can start to prepare the application enviroment.
+Now we have the contract wasm and the token deployed and initialized, we can start to prepare the application environment.
 
 ### Install dependencies
-This project uses two kinds of dependencies, php dependencies which are managed with composer and javascript dependencies which are manager with npm. To install both of them, execute the following commands in your project root folder:
+This project uses two kinds of dependencies, php dependencies which are managed with composer and javascript dependencies which are managed with npm. To install both of them, execute the following commands in your project root folder:
 ```shell
 composer install
 npm install
@@ -98,7 +97,7 @@ To generate the wasm id, deploy the contract so you can get it. To do it, execut
 ```shell
 bin/console contract:deploy
 ```
-It will print the wasm id. Copy a set it as the *SOROBAN_CONTRACT_WASM_ID* value.
+It will print the wasm id. Copy and set it as the *SOROBAN_CONTRACT_WASM_ID* value.
 
 ### Initialize the database
 Before creating the database install [sqlite](https://www.sqlite.org/index.html).
@@ -147,4 +146,39 @@ This command starts a development server.
 
 ### Login to the application
 
-Open a browser and go to the login page: http://127.0.0.1:8000/login
+Open a browser and go to the login page: http://127.0.0.1:8000/login. You should see the following login page:
+
+![Login Page](/docs/images/login_app.png)
+
+> Open the *src/DataFixtures/UserFixtures.php* file to get the user credentials.
+
+### Users list
+
+After login, you will see the following page:
+
+![Users list page](/docs/images/users_list_app.png)
+
+Click on the *Create contract* link to go to create the contract
+
+### Create contract 
+
+After clicking on *Create contract*, you will see a page with a form:
+
+![Create contract Page](/docs/images/create_contract_app.png)
+
+Fill the form with the user listed on the previous page (*user2@domain.com*), a label and a description of your choice and the token code you deployed and installed previously. The click on *Create Contract* button. It will take some time and then you will see the contract list page:
+
+![Contract list Page](/docs/images/contract_list_app.png)
+
+### Sending a deposit
+
+To send a deposit, click on the *Send deposit* link. You will see the following page:
+
+![Send deposit Page](/docs/images/send_deposit.png)
+
+Introduce an amount and click on the *Send deposit* button.
+
+> I hve problems sending the deposit because the contract token transfer funcion throws a function trapped error. 
+
+### Plus
+There is a *stimulus* controller on the path *assets/controllers/wallet_controller.js* which shows how to interact with the freighter wallet and get the user's public key.
