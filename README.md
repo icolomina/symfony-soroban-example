@@ -178,7 +178,7 @@ To send a deposit, click on the *Send deposit* link. You will see the following 
 
 Introduce an amount and click on the *Send deposit* button.
 
-> I hve problems sending the deposit because the contract token transfer funcion throws a function trapped error. 
+> I have problems sending the deposit because the contract token transfer funcion throws a function trapped error. 
 
 ### Plus
 There is a *stimulus* controller on the path *assets/controllers/wallet_controller.js* which shows how to interact with the freighter wallet and get the user's public key.
