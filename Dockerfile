@@ -40,6 +40,7 @@ WORKDIR /var/www/crypto-bills-dapp
 RUN composer install
 RUN bin/console doctrine:schema:create
 RUN bin/console app:setup
+RUN npm install
 RUN npm run dev
 
 RUN rm /etc/nginx/sites-enabled/default
