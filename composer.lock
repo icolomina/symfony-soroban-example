@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "1f3fe9e54837210b26c0623f6544478c",
+    "content-hash": "bdb8ecdf645ba80205fa94a96b79a3a4",
     "packages": [
         {
             "name": "christian-riesen/base32",
@@ -2697,16 +2697,16 @@
         },
         {
             "name": "soneso/stellar-php-sdk",
-            "version": "1.3.2",
+            "version": "1.3.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Soneso/stellar-php-sdk.git",
-                "reference": "fc883f0d22e0cafea4de462ae786679b0e10bc4b"
+                "reference": "c5fbfbcba2a6fdab1126d05b574879921c08b5a9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Soneso/stellar-php-sdk/zipball/fc883f0d22e0cafea4de462ae786679b0e10bc4b",
-                "reference": "fc883f0d22e0cafea4de462ae786679b0e10bc4b",
+                "url": "https://api.github.com/repos/Soneso/stellar-php-sdk/zipball/c5fbfbcba2a6fdab1126d05b574879921c08b5a9",
+                "reference": "c5fbfbcba2a6fdab1126d05b574879921c08b5a9",
                 "shasum": ""
             },
             "require": {
@@ -2741,9 +2741,9 @@
             "description": "Stellar PHP SDK for the Stellar Network",
             "support": {
                 "issues": "https://github.com/Soneso/stellar-php-sdk/issues",
-                "source": "https://github.com/Soneso/stellar-php-sdk/tree/1.3.2"
+                "source": "https://github.com/Soneso/stellar-php-sdk/tree/1.3.3"
             },
-            "time": "2023-10-27T13:42:39+00:00"
+            "time": "2023-12-18T19:21:49+00:00"
         },
         {
             "name": "symfony/asset",

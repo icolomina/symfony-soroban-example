@@ -21,7 +21,7 @@ class ContractManager {
     public function createContract(CreateContractInput $createContractInput, User $sender): Contract
     {
         $token = $this->em->getRepository(Token::class)->findOneBy(['code' => $createContractInput->getToken()]);
-        $receiver = $this->em->getRepository(User::class)->findOneBy(['email' => $createContractInput->getReceiver()]);
+        $receiver = $this->em->getRepository(User::class)->findOneBy(['address' => $createContractInput->getReceiver()]);
 
         $contract = new Contract();
         $contract->setReceiver($receiver);
@@ -46,5 +46,11 @@ class ContractManager {
     public function getContracts(): array
     {
         return $this->em->getRepository(Contract::class)->findAll();
+    }
+
+    public function getToken(): Token 
+    {
+        $tokens = $this->em->getRepository(Token::class)->findAll();
+        return $tokens[0];
     }
 }

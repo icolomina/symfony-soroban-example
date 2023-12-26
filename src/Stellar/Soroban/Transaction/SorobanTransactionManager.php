@@ -4,6 +4,7 @@ namespace App\Stellar\Soroban\Transaction;
 
 use Soneso\StellarSDK\Crypto\KeyPair;
 use Soneso\StellarSDK\Network;
+use Soneso\StellarSDK\Soroban\Requests\SimulateTransactionRequest;
 use Soneso\StellarSDK\Soroban\Responses\GetTransactionResponse;
 use Soneso\StellarSDK\Soroban\Responses\SendTransactionResponse;
 use Soneso\StellarSDK\Soroban\SorobanAuthorizationEntry;
@@ -14,7 +15,8 @@ class SorobanTransactionManager {
 
     public function simulate(SorobanServer $server, Transaction $transaction, KeyPair $keyPair, bool $addAuth = false, ?KeyPair $invoker = null): void
     {
-        $simulateResponse = $server->simulateTransaction($transaction);
+        $request = new SimulateTransactionRequest($transaction);
+        $simulateResponse = $server->simulateTransaction($request);
 
         if($simulateResponse->getError()) {
             throw new \RuntimeException('Transaction simulation error: ' . $simulateResponse->getError());
@@ -35,6 +37,8 @@ class SorobanTransactionManager {
                         $a->sign($invoker, Network::testnet());
                     }
                 }
+
+                $transaction->setSorobanAuth($auth);
             }
             else{
                 $transaction->setSorobanAuth($simulateResponse->getSorobanAuth());

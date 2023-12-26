@@ -2,11 +2,15 @@
 
 namespace App\Stellar\Soroban\Contract;
 
+use App\Entity\Configuration;
+use Doctrine\ORM\EntityManagerInterface;
+
 class WasmManager {
 
     public function __construct(
         private readonly string $wasmFile,
-        private readonly string $wasmTokenFile
+        private readonly string $wasmTokenFile,
+        private readonly EntityManagerInterface $em
     ){}
 
     public function getWamsCode(): string
@@ -25,5 +29,11 @@ class WasmManager {
         }
 
         return file_get_contents($this->wasmTokenFile);
+    }
+
+    public function getWasmId(): string
+    {
+        $config = $this->em->getRepository(Configuration::class)->findOneBy(['configKey' => 'sc_wasm_id']);
+        return $config->getConfigValue();
     }
 }

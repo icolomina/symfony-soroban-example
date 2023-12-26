@@ -27,8 +27,8 @@ fn init_test_data(e: &Env) -> TestData {
     let contract_id = e.register_contract(None, CryptoDeposit);
     let client = CryptoDepositClient::new(&e, &contract_id);
 
-    let admin = Address::random(&e);
-    let user = Address::random(&e);
+    let admin = Address::generate(&e);
+    let user = Address::generate(&e);
     let (token, token_admin) = create_token_contract(&e, &admin);
 
     TestData {

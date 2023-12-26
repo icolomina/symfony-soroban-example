@@ -3,18 +3,22 @@ import { isConnected, getPublicKey } from "@stellar/freighter-api";
 
 export default class extends Controller {
 
-    connect() {}
+    static targets = ['loader']
+    connect() {
+        this.loaderTarget.hidden = true;
+    }
 
-    async connectWallet() {
+    async login() {
         if (!await isConnected()) {
-            alert('User has not Freighter. Install Freighter ans retry');
+            alert('User has not Freighter. Install Freighter and retry');
         }
 
         let publicKey = '';
+        this.loaderTarget.hidden = false;
         getPublicKey().then(
-            async (pkey) => {
+            (pkey) => {
                 publicKey = pkey;
-                await fetch('/panel/user/address', {
+                fetch('/login', {
                     method: "POST",
                     mode: "same-origin",
                     headers: {
@@ -22,11 +26,20 @@ export default class extends Controller {
                     },
                     body: JSON.stringify({ 'address' : publicKey })
 
-                });
-
-                window.location.reload();
+                })
+                .then(
+                    async (response) => {
+                        this.loaderTarget.hidden = true;
+                        if(response.ok) {
+                            const json = await response.json();
+                            window.location.replace(json.url);
+                        }
+                    }
+                    
+                )
             },
             (e) => {
+                this.loaderTarget.hidden = true;
                 console.log(e);
             }
         )

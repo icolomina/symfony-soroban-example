@@ -35,9 +35,10 @@ class PanelController extends AbstractController
     }
 
     #[Route('/user/contract-create', name: 'panel_user_get_contract_form', methods: ['GET'])]
-    public function getCreateContract(): Response
+    public function getCreateContract(ContractManager $contractManager): Response
     {
-        return $this->render('panel/create_contract.html.twig');
+        $token = $contractManager->getToken();
+        return $this->render('panel/create_contract.html.twig', ['token' => $token]);
     }
 
     #[Route('/user/contract', name: 'panel_user_post_contract', methods: ['POST'])]

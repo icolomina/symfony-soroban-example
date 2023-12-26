@@ -2,12 +2,15 @@ import { Controller } from '@hotwired/stimulus';
 
 export default class extends Controller {
 
-    static targets = [ "receiver", "label", "description", "token" ]
-    connect() {}
+    static targets = [ "receiver", "label", "description", "token", "loader" ]
+    connect() {
+        this.loaderTarget.hidden = true;
+    }
 
     async createContract() {
 
-        await fetch('/panel/user/contract', {
+        this.loaderTarget.hidden = false;
+        fetch('/panel/user/contract', {
             method: "POST",
             mode: "same-origin",
             headers: {
@@ -20,8 +23,19 @@ export default class extends Controller {
                 'token' : this.tokenTarget.value
             })
 
-        });
-
-        window.location.replace('http://127.0.0.1:8000/panel/user/contracts');
+        }).then(
+            async (response) => {
+                if(response.ok) {
+                    const json = await response.json();
+                    this.loaderTarget.hidden = true;
+                    window.location.replace(window.location.origin + '/panel/user/contracts');
+                }
+            }
+        ).catch(
+            (e) => { 
+                this.loaderTarget.hidden = true;
+                console.log(e) 
+            }
+        )        
     }
 }

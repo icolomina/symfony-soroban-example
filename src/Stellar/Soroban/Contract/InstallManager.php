@@ -17,17 +17,17 @@ use Soneso\StellarSDK\TransactionBuilder;
 class InstallManager {
 
     public function __construct(
-        private readonly string $wasmId,
         private readonly ServerManager $serverManager,
         private readonly SorobanTransactionManager $sorobanTransactionManager,
-        private readonly AccountManager $accountManager
+        private readonly AccountManager $accountManager,
+        private readonly WasmManager $wasmManager
     ){ }
 
     public function installContract(?string $wasmId = null): string
     {
         $keyPair = $this->accountManager->getSystemKeyPair();
         $account = $this->accountManager->getAccount($keyPair);
-        $wasmToInstall = $wasmId ?? $this->wasmId;
+        $wasmToInstall = $wasmId ?? $this->wasmManager->getWasmId();
 
         $createContractHostFunction = new CreateContractHostFunction(Address::fromAccountId($account->getAccountId()), $wasmToInstall);
         $builder = new InvokeHostFunctionOperationBuilder($createContractHostFunction);

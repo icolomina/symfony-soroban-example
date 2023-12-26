@@ -41,6 +41,9 @@ class Contract
     #[ORM\Column]
     private ?bool $enabled = null;
 
+    #[ORM\Column(nullable: true)]
+    private ?float $balance = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -138,6 +141,18 @@ class Contract
     public function setEnabled(bool $enabled): static
     {
         $this->enabled = $enabled;
+
+        return $this;
+    }
+
+    public function getBalance(): ?float
+    {
+        return $this->balance;
+    }
+
+    public function setBalance(?float $balance): static
+    {
+        $this->balance = $balance;
 
         return $this;
     }

@@ -4,12 +4,8 @@
 # Put parameters here that don't need to change on each machine where the app is deployed
 # https://symfony.com/doc/current/best_practices.html#use-parameters-for-application-configuration
 parameters:
-    keys.secret: '%env(SOROBAN_SECRET_KEY)%'
-    keys.public: '%env(SOROBAN_PUBLIC_KEY)%'
-    keys.token: '%env(SOROBAN_TOKEN_ADDR)%'
-    wasm: '%kernel.project_dir%/contract/target/wasm32-unknown-unknown/release/crypto_bills.wasm'
-    wasm_token: '%kernel.project_dir%/token/target/wasm32-unknown-unknown/release/soroban_token_contract.wasm'
-    wasm_id: '%env(SOROBAN_CONTRACT_WASM_ID)%'
+    wasm: '%kernel.project_dir%/wasm/crypto_bills.wasm'
+    wasm_token: '%kernel.project_dir%/wasm/soroban_token_contract.wasm'
 
 services:
     # default configuration for services in *this* file
@@ -17,11 +13,8 @@ services:
         autowire: true      # Automatically injects dependencies in your services.
         autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
         bind:
-            $secret: '%keys.secret%'
             $wasmFile: '%wasm%'
             $wasmTokenFile: '%wasm_token%'
-            $wasmId: '%wasm_id%'
-            $sorobanTokenAddr: '%keys.token%'
 
     # makes classes in src/ available to be used as services
     # this creates a service per class whose id is the fully-qualified class name

@@ -7,7 +7,7 @@ security:
         app_user_provider:
             entity:
                 class: App\Entity\User
-                property: email
+                property: address
     firewalls:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
@@ -15,7 +15,7 @@ security:
         panel:
             #pattern: ^/panel
             provider: app_user_provider
-            custom_authenticator: App\Security\UserAuthenticator
+            custom_authenticator: App\Security\WalletAuthenticator
             lazy: true
             logout:
                 path: app_logout
