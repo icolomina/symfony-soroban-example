@@ -28,6 +28,6 @@ After logging in, you will see a list of users (only one user). Copy the user ad
 Then, press the "Create contract" button. It will take a few seconds since it has to install and initialize the contract. After that, you will be redirected to a contract list page and you can see your
 recently created contract. 
 
-Now it's time to deposit some tokens. Press the "Send deposit" link. You will see a form field called amount. Write the amount you want to deposit (50 for example) and press the "Send deposit" button. After a few seconds, you will be redirected to the contract list and you will see that your contract balance has been increased (you will see 50). it you make another deposit, you will see 100 in the balance (the contract returns the current contract address balance).
+Now it's time to deposit some tokens. Press the "Send deposit" link. You will see a form field called amount. Write the amount you want to deposit (50 for example) and press the "Send deposit" button. After a few seconds, you will be redirected to the contract list and you will see that your contract balance has been increased (you will see 50). If you make another deposit, you will see 100 in the balance (the contract returns the current contract address balance).
 
 > Do not create more than one contract since the app always make the deposits over the same contract.
