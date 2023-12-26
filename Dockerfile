@@ -13,7 +13,7 @@ ENV LANGUAGE es_ES:en
 ENV LC_ALL es_ES.UTF-8
 
 RUN apt-get install -y software-properties-common
-RUN apt-get install -y nginx sqlite curl php8.1 php8.1-fpm php8.1-xml php8.1-mbstring php8.1-curl php8.1-gmp php8.1-gd php8.1-sqlite3 php8.1-bcmath
+RUN apt-get install -y nginx sqlite curl git php8.1 php8.1-fpm php8.1-xml php8.1-mbstring php8.1-curl php8.1-gmp php8.1-gd php8.1-sqlite3 php8.1-bcmath
 
 WORKDIR /var/www/crypto-bills-dapp
 COPY . /var/www/crypto-bills-dapp
