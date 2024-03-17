@@ -37,6 +37,7 @@ RUN npm --version
 
 WORKDIR /var/www/crypto-bills-dapp
 
+ENV COMPOSER_ALLOW_SUPERUSER=1
 RUN composer install
 RUN bin/console doctrine:schema:create
 RUN bin/console app:setup
