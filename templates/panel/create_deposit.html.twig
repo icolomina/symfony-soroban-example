@@ -1,16 +1,44 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Create contract{% endblock %}
+{% block title %}Make a deposit{% endblock %}
 
 {% block body %}
 
-<form {{ stimulus_controller('deposit') }} method="POST" action="#">
-  <div id="loader" {{ stimulus_target('deposit', 'loader')}}></div>
-  <div class="mb-3">
-    <label for="amount" class="form-label">Amount</label>
-    <input {{ stimulus_target('deposit', 'amount') }} type="text" class="form-control" id="amount" name="amount" aria-describedby="amountHelp">
+<div class="container-fluid px-4">
+  <h1 class="mt-4">Deposits</h1>
+    <ol class="breadcrumb mb-4">
+        <li class="breadcrumb-item active">Send deposit to contract <strong>{{ contract.getLabel() }}</strong></li>
+    </ol>
+  
+  <div class="row" {{ stimulus_controller('deposit') }}>
+    <div class="col-xl-6">
+      <div class="card mb-4">
+        <div class="card-header">
+          <i class="fas fa-chart-area me-1"></i>
+            Send deposit form
+        </div>
+        <div class="card-body">
+          <div class="row mb-3">
+            <div class="col-md-12">
+              <div class="form-floating mb-3 mb-md-0">
+                <input {{ stimulus_target('deposit', 'amount') }} type="number" class="form-control" id="amount" name="amount">
+                <label for="amount" class="form-label">Amount</label>
+              </div>
+            </div>
+          </div>
+          <div class="row mb-3">
+            <div class="col-md-12">
+              <button {{ stimulus_target('deposit', 'submitButton') }} type="button" class="btn btn-primary" {{ stimulus_action('deposit', 'sendDeposit', null, { 'contract_id' : contract.id }) }}>Send deposit</button>
+              <button {{ stimulus_target('deposit', 'loaderButton') }} class="btn btn-primary" type="button" disabled>
+                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                Sending deposit. This can take a few seconds. Please wait...
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
-  <button type="button" class="btn btn-primary" {{ stimulus_action('deposit', 'sendDeposit') }}>Send deposit</button>
-</form>
+</div>
 
 {% endblock %}

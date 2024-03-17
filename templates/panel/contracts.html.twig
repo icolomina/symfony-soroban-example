@@ -3,38 +3,76 @@
 {% block title %}Contracts{% endblock %}
 
 {% block body %}
-
-<div class="table-responsive">
-    <table class="table">
-        <thead>
-            <tr>
-            <th scope="col">#</th>
-            <th scope="col">Balance</th>
-            <th scope="col">Sender</th>
-            <th scope="col">Receiver</th>
-            <th scope="col">Enabled</th>
-            <th scope="col">Label</th>
-            <th scope="col">Description</th>
-            <th scope="col">Address</th>
-            <th scope="col">Created At</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for contract in contracts %}
-                <tr>
-                    <th scope="row">{{ contract.id }}</th>
-                    <td>{{ contract.balance }}</th>
-                    <td><small>{{ contract.sender.address }}</small></td>
-                    <td><small>{{ contract.receiver.address }}</small></td>
-                    <td>{{ contract.enabled }}</td>
-                    <td>{{ contract.label }}</td>
-                    <td>{{ contract.description }}</td>
-                    <td>{{ contract.address }}</td>
-                    <td>{{ contract.createdAt | date("Y-m-d H:i") }}</td>
-                </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-</div>
-
+    <div class="container-fluid px-4">
+    <h1 class="mt-4">Contracts</h1>
+    <ol class="breadcrumb mb-4">
+        <li class="breadcrumb-item active">Contracts</li>
+    </ol>
+    
+    {% if contracts is empty %}
+        <div class="row">
+            <div class="col-xl-6">
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <i class="fas fa-chart-area me-1"></i>
+                            No contracts yet
+                        </div>
+                        <div class="card-body">
+                            <h4>There are no contracts created yet. Create a new one from the "Create contract" menu.
+                        </div>
+                     </div>
+                </div>
+            </div>
+        </div>
+    {% else %}
+        <div class="card mb-4">
+            <div class="card-header">
+                <i class="fas fa-table me-1"></i>
+                Contracts list
+            </div>
+            <div class="card-body">
+                <div class="datatable-wrapper datatable-loading no-footer sortable searchable fixed-columns">
+                    <div class="datatable-container" >
+                        <table id="datatablesSimple" class="datatable-table">
+                            <thead>
+                                <tr>
+                                    <th scope="col">#</th>
+                                    <th scope="col">Enabled</th>
+                                    <th scope="col">Label</th>
+                                    <th scope="col">Description</th>
+                                    <th scope="col">Address</th>
+                                    <th scope="col">Balance</th>
+                                    <th scope="col">Created At</th>
+                                    <th scope="col">Options</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for contract in contracts %}
+                                    <tr>
+                                        <td>{{ contract.id }}</td>
+                                        <td>
+                                            {% if contract.enabled %}
+                                                <i class="bi bi-check-square"></i>
+                                            {% else %}
+                                                <i class="bi bi-x-square"></i>
+                                            {% endif %}
+                                        </td>
+                                        <td>{{ contract.label }}</td>
+                                        <td>{{ contract.description }}</td>
+                                        <td>{{ contract.address }}</td>
+                                        <td>{{ contract.balance | default(0) }}</td>
+                                        <td>{{ contract.createdAt | date("Y-m-d H:i") }}</td>
+                                        <td>
+                                            <a href="{{ path('get_new_deposit', {id: contract.id}) }}" class="btn btn-primary btn-sm" tabindex="-1" role="button" aria-disabled="true">Deposit</a>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+    </div>
 {% endblock %}

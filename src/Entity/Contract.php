@@ -21,10 +21,6 @@ class Contract
     #[ORM\JoinColumn(nullable: false)]
     private ?User $sender = null;
 
-    #[ORM\ManyToOne]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?User $receiver = null;
-
     #[ORM\Column(length: 100)]
     private ?string $label = null;
 
@@ -69,18 +65,6 @@ class Contract
     public function setSender(?User $sender): static
     {
         $this->sender = $sender;
-
-        return $this;
-    }
-
-    public function getReceiver(): ?User
-    {
-        return $this->receiver;
-    }
-
-    public function setReceiver(?User $receiver): static
-    {
-        $this->receiver = $receiver;
 
         return $this;
     }

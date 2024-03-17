@@ -2,15 +2,17 @@ import { Controller } from '@hotwired/stimulus';
 
 export default class extends Controller {
 
-    static targets = ['amount', 'loader']
+    static targets = ['amount', "loaderButton", "submitButton"]
     connect() {
-        this.loaderTarget.hidden = true;
+        this.loaderButtonTarget.hidden = true;
+        this.submitButtonTarget.hidden = false;
     }
 
-    async sendDeposit() {
+    async sendDeposit(event) {
 
-        this.loaderTarget.hidden = false;
-        fetch('/panel/user/deposit-send', {
+        this.loaderButtonTarget.hidden = false;
+        this.submitButtonTarget.hidden = true;
+        fetch('/contract/' + event.params.contractId + '/deposit-create', {
             method: "POST",
             mode: "same-origin",
             headers: {
@@ -23,13 +25,13 @@ export default class extends Controller {
             async (response) => {
                 if(response.ok) {
                     const json = await response.json();
-                    this.loaderTarget.hidden = true;
-                    window.location.replace(window.location.origin + '/panel/user/contracts');
+                    this.loaderButtonTarget.hidden = true;
+                    window.location.replace(window.location.origin);
                 }
             }
         ).catch(
             (e) => { 
-                this.loaderTarget.hidden = true;
+                this.loaderButtonTarget.hidden = true;
                 console.log(e) 
             }
         ) 

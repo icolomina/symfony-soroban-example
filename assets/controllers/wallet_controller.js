@@ -1,11 +1,13 @@
 import { Controller } from '@hotwired/stimulus';
 import { isConnected, getPublicKey } from "@stellar/freighter-api";
 
+
 export default class extends Controller {
 
-    static targets = ['loader']
+    //static targets = ['loader']
     connect() {
-        this.loaderTarget.hidden = true;
+        console.log('hello');
+        //this.loaderTarget.hidden = true;
     }
 
     async login() {
@@ -14,10 +16,11 @@ export default class extends Controller {
         }
 
         let publicKey = '';
-        this.loaderTarget.hidden = false;
+        //this.loaderTarget.hidden = false;
         getPublicKey().then(
-            (pkey) => {
+           async(pkey) => {
                 publicKey = pkey;
+                console.log(publicKey);
                 fetch('/login', {
                     method: "POST",
                     mode: "same-origin",
@@ -29,7 +32,7 @@ export default class extends Controller {
                 })
                 .then(
                     async (response) => {
-                        this.loaderTarget.hidden = true;
+                       // this.loaderTarget.hidden = true;
                         if(response.ok) {
                             const json = await response.json();
                             window.location.replace(json.url);
@@ -39,7 +42,7 @@ export default class extends Controller {
                 )
             },
             (e) => {
-                this.loaderTarget.hidden = true;
+                //this.loaderTarget.hidden = true;
                 console.log(e);
             }
         )

@@ -16,32 +16,24 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\SerializerInterface;
 
-#[Route('/panel')]
 class PanelController extends AbstractController
 {
-    #[Route('/index', name: 'panel_index', methods: ['GET'])]
-    public function getPanel(UserManager $userManager): Response
+
+    #[Route('/', name: 'get_contracts', methods: ['GET'])]
+    public function getContracts(ContractManager $contractManager): Response
     {
-        $users = $userManager->getUsers($this->getUser());
-        return $this->render('panel/panel.html.twig', ['users' => $users]);
+        $contracts = $contractManager->getContracts();
+        return $this->render('panel/contracts.html.twig', [ 'contracts' => $contracts ]);
     }
 
-    #[Route('/user/address', name: 'panel_user_post_address', methods: ['POST'])]
-    public function postUserAddress(Request $request, UserManager $userManager): JsonResponse
-    {
-        $body = json_decode($request->getContent(), true);
-        $userManager->setUserAddress($this->getUser(), $body['address']);
-        return new JsonResponse(null, 204);
-    }
-
-    #[Route('/user/contract-create', name: 'panel_user_get_contract_form', methods: ['GET'])]
+    #[Route('/contract-new', name: 'get_new_contract', methods: ['GET'])]
     public function getCreateContract(ContractManager $contractManager): Response
     {
         $token = $contractManager->getToken();
         return $this->render('panel/create_contract.html.twig', ['token' => $token]);
     }
 
-    #[Route('/user/contract', name: 'panel_user_post_contract', methods: ['POST'])]
+    #[Route('/contract-create', name: 'post_create_contract', methods: ['POST'])]
     public function postContract(Request $request, SerializerInterface $serializer, ContractManager $contractManager): JsonResponse
     {
         $createContractInput = $serializer->deserialize($request->getContent(), CreateContractInput::class, 'json');
@@ -50,25 +42,16 @@ class PanelController extends AbstractController
         return new JsonResponse(['id' => $contract->getId()], Response::HTTP_CREATED);
     }
 
-    #[Route('/user/contracts', name: 'panel_user_get_contracts', methods: ['GET'])]
-    public function getContracts(ContractManager $contractManager): Response
+    #[Route('/contract/{id}/deposit-new', name: 'get_new_deposit', methods: ['GET'])]
+    public function getSendDeposit(Contract $contract): Response
     {
-        $contracts = $contractManager->getContracts();
-        return $this->render('panel/contracts.html.twig', [ 'contracts' => $contracts ]);
+        return $this->render('panel/create_deposit.html.twig', ['contract' => $contract ]);
     }
 
-    #[Route('/user/deposit-create', name: 'panel_user_get_deposit_form', methods: ['GET'])]
-    public function getSendDeposit(EntityManagerInterface $em): Response
-    {
-        $contract = $em->getRepository(Contract::class)->findOneBy(['sender' => $this->getUser()]);
-        return $this->render('panel/create_deposit.html.twig', ['contract' => StrKey::encodeContractIdHex($contract->getAddress())]);
-    }
-
-    #[Route('/user/deposit-send', name: 'panel_user_post_deposit', methods: ['POST'])]
-    public function postSendDeposit(Request $request, EntityManagerInterface $em, InteractManager $interactManager): JsonResponse
+    #[Route('/contract/{id}/deposit-create', name: 'post_create_deposit', methods: ['POST'])]
+    public function postSendDeposit(Contract $contract, Request $request, InteractManager $interactManager): JsonResponse
     {
         $body = json_decode($request->getContent(), true);
-        $contract = $em->getRepository(Contract::class)->findOneBy(['sender' => $this->getUser()]);
         $balance  = $interactManager->depositInContract($contract, (int)$body['amount']);
 
         return new JsonResponse(['balance' => $balance]);

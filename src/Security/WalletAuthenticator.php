@@ -16,12 +16,12 @@ use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\Security\Core\Exception\CustomUserMessageAuthenticationException;
-use Symfony\Component\Security\Http\Authenticator\InteractiveAuthenticatorInterface;
+use Symfony\Component\Security\Http\Authenticator\AuthenticatorInterface;
 use Symfony\Component\Security\Http\Authenticator\Passport\Badge\UserBadge;
 use Symfony\Component\Security\Http\Authenticator\Passport\Passport;
 use Symfony\Component\Security\Http\Authenticator\Passport\SelfValidatingPassport;
 
-class WalletAuthenticator implements InteractiveAuthenticatorInterface {
+class WalletAuthenticator implements AuthenticatorInterface {
 
     public const LOGIN_ROUTE = 'app_get_login';
 
@@ -39,12 +39,11 @@ class WalletAuthenticator implements InteractiveAuthenticatorInterface {
     public function authenticate(Request $request): Passport
     {
         $jsonContent = json_decode($request->getContent(), true);
-        if(!isset($jsonContent['address'])) {
+        if(!isset($jsonContent['address']) ) {
             throw new CustomUserMessageAuthenticationException('Missing credentials');
         }
 
-        $address = $jsonContent['address'];
-        $user = $this->em->getRepository(User::class)->findOneBy(['address' => $address]);
+        $user = $this->em->getRepository(User::class)->findOneBy(['address' => $jsonContent['address'] ]);
         if(!$user) {
 
             $keyPair = KeyPair::random();
@@ -52,7 +51,7 @@ class WalletAuthenticator implements InteractiveAuthenticatorInterface {
             
             $user = new User();
             $user->setEnabled(true);
-            $user->setAddress($address);
+            $user->setAddress($jsonContent['address']);
             $user->setSecret($keyPair->getSecretSeed());
             $user->setCreatedAt(new \DateTimeImmutable());
             $this->em->persist($user);
@@ -64,7 +63,7 @@ class WalletAuthenticator implements InteractiveAuthenticatorInterface {
 
         }
 
-        return new SelfValidatingPassport(new UserBadge($address));
+        return new SelfValidatingPassport(new UserBadge($jsonContent['address']));
     }
 
     public function createToken(Passport $passport, string $firewallName): TokenInterface
@@ -80,11 +79,6 @@ class WalletAuthenticator implements InteractiveAuthenticatorInterface {
     public function onAuthenticationFailure(Request $request, AuthenticationException $exception): ?Response
     {
         return new JsonResponse(['error' => $exception->getMessage()], JsonResponse::HTTP_UNAUTHORIZED);
-    }
-
-    public function isInteractive(): bool
-    {
-        return true;
     }
 
     protected function getLoginUrl(Request $request): string

@@ -18,6 +18,7 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 #[AsCommand(
     name : 'app:setup'
@@ -30,7 +31,8 @@ class SetupCommand extends Command
         private readonly InstallManager $installManager,
         private readonly WasmManager $wasmManager,
         private readonly EntityManagerInterface $em,
-        private readonly InteractManager $interactManager
+        private readonly InteractManager $interactManager,
+        private readonly UserPasswordHasherInterface $passwordHasher
     ){
         parent::__construct();
     }
@@ -96,6 +98,8 @@ class SetupCommand extends Command
         $user->setCreatedAt(new \DateTimeImmutable());
         $user->setAddress($keyPairUser->getAccountId());
         $user->setSecret($keyPairUser->getSecretSeed());
+        $user->setEmail('user@test.com');
+        $user->setPassword($this->passwordHasher->hashPassword($user, 'test'));
 
         $this->em->persist($user);
         $this->em->flush();
