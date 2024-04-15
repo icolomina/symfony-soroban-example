@@ -6,7 +6,7 @@ and interact with the contract.
 The project setup is pretty easy. Simply follow the below steps:
 
 ```shell
-git clone git@github.com:icolomina/symfony-soroban-example.git
+git clone https://github.com/icolomina/symfony-soroban-example.git 
 cd symfony-soroban-example
 docker build --no-cache -t crypto-bills .
 docker run -it -p 97:80 crypto-bills
