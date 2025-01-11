@@ -70,7 +70,7 @@ class SetupCommand extends Command
         $output->writeln('Token contract deployed - Wasm id: ' . $wasmTokenId);
 
         $output->writeln('Installing token contract ....');
-        $id = $this->installManager->installContract($wasmTokenId);
+        $id = $this->installManager->installTokenContract($wasmTokenId);
         $output->writeln('Token contract installed. Token Contract id: ' . $id);
 
         $token = new Token();

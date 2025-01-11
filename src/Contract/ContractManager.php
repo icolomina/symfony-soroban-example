@@ -30,9 +30,8 @@ class ContractManager {
         $contract->setEnabled(true);
         $contract->setSender($sender);
 
-        $contractId = $this->contractInstallManager->installContract();
+        $contractId = $this->contractInstallManager->installContract($contract);
         $contract->setAddress($contractId);
-        $this->contractInteractManager->initContract($contract);
 
         $this->em->persist($contract);
         $this->em->flush();

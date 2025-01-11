@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "6367a7553b8b439d1dd10adac304c988",
+    "content-hash": "bfc183474728103d0e393806be2b35a7",
     "packages": [
         {
             "name": "christian-riesen/base32",
@@ -2697,16 +2697,16 @@
         },
         {
             "name": "soneso/stellar-php-sdk",
-            "version": "1.4.0",
+            "version": "1.6.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Soneso/stellar-php-sdk.git",
-                "reference": "798492f4f134cddfdde27b81109161aebd5fc447"
+                "reference": "24016dfec684aa5f428f7502ae7bdc69223e7bcc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Soneso/stellar-php-sdk/zipball/798492f4f134cddfdde27b81109161aebd5fc447",
-                "reference": "798492f4f134cddfdde27b81109161aebd5fc447",
+                "url": "https://api.github.com/repos/Soneso/stellar-php-sdk/zipball/24016dfec684aa5f428f7502ae7bdc69223e7bcc",
+                "reference": "24016dfec684aa5f428f7502ae7bdc69223e7bcc",
                 "shasum": ""
             },
             "require": {
@@ -2719,7 +2719,7 @@
                 "yosymfony/toml": "~1.0"
             },
             "require-dev": {
-                "phpunit/phpunit": "~9.5"
+                "phpunit/phpunit": "~10.0"
             },
             "type": "library",
             "autoload": {
@@ -2741,9 +2741,9 @@
             "description": "Stellar PHP SDK for the Stellar Network",
             "support": {
                 "issues": "https://github.com/Soneso/stellar-php-sdk/issues",
-                "source": "https://github.com/Soneso/stellar-php-sdk/tree/1.4.0"
+                "source": "https://github.com/Soneso/stellar-php-sdk/tree/1.6.1"
             },
-            "time": "2024-03-13T22:42:54+00:00"
+            "time": "2024-12-04T13:26:28+00:00"
         },
         {
             "name": "symfony/asset",

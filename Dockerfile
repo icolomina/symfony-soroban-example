@@ -13,7 +13,7 @@ ENV LANGUAGE es_ES:en
 ENV LC_ALL es_ES.UTF-8
 
 RUN apt-get install -y software-properties-common
-RUN apt-get install -y nginx sqlite curl git php8.1 php8.1-fpm php8.1-xml php8.1-mbstring php8.1-curl php8.1-gmp php8.1-gd php8.1-sqlite3 php8.1-bcmath
+RUN apt-get install -y nginx sqlite curl git php8.2 php8.2-fpm php8.2-xml php8.2-mbstring php8.2-curl php8.2-gmp php8.2-gd php8.2-sqlite3 php8.2-bcmath
 
 WORKDIR /var/www/crypto-bills-dapp
 COPY . /var/www/crypto-bills-dapp
@@ -39,6 +39,7 @@ WORKDIR /var/www/crypto-bills-dapp
 
 ENV COMPOSER_ALLOW_SUPERUSER=1
 RUN composer install
+RUN bin/console cache:clear
 RUN bin/console doctrine:schema:create
 RUN bin/console app:setup
 RUN npm install
@@ -51,7 +52,7 @@ RUN ln -s /etc/nginx/sites-available/vhost.conf /etc/nginx/sites-enabled/vhost.c
 RUN chmod -R 777 var/
 
 # Define default command.
-CMD service php8.1-fpm start && nginx && tail -f /dev/null
+CMD service php8.2-fpm start && nginx && tail -f /dev/null
 
 # Expose ports.
 EXPOSE 80

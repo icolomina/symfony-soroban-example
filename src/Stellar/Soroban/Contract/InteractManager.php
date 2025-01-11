@@ -26,34 +26,6 @@ class InteractManager {
         private readonly EntityManagerInterface $em
     ){}
 
-    public function initContract(Contract $contract): bool
-    {
-        $keyPair = $this->accountManager->getSystemKeyPair();
-        $account = $this->accountManager->getAccount($keyPair);
-
-        $invokeContractHostFunction = new InvokeContractHostFunction($contract->getAddress(), "init", [
-            Address::fromAccountId($account->getAccountId())->toXdrSCVal(),
-            Address::fromContractId($contract->getToken()->getAddress())->toXdrSCVal()
-        ]);
-
-        $builder = new InvokeHostFunctionOperationBuilder($invokeContractHostFunction);
-        $operation = $builder->build();
-        $transaction = (new TransactionBuilder($account))->addOperation($operation)->build();
-
-        $server = $this->serverManager->getServer(Networks::TESTNET);
-        $this->sorobanTransactionManager->simulate($server, $transaction, $keyPair, true);
-
-        $sendResponse = $server->sendTransaction($transaction);
-        $transactionResponse = $this->sorobanTransactionManager->waitForTransaction($server, $sendResponse);
-
-        $resultValue = $transactionResponse->getResultValue();
-        if($resultValue->getError()) {
-            throw new \RuntimeException('Contract call execution failed: ' . $resultValue->getError()->getCode()->getValue());
-        }
-
-        return $resultValue->getB();
-    }
-
     public function depositInContract(Contract $contract, int $amount): int
     {
         $keyPairSubmiter = $this->accountManager->getSystemKeyPair();
