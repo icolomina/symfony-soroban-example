@@ -24,13 +24,17 @@ class InstallManager {
         private readonly WasmManager $wasmManager
     ){ }
 
-    public function installTokenContract(?string $wasmId = null): string
+    public function installTokenContract(array $tokenArgs, ?string $wasmId = null): string
     {
         $keyPair = $this->accountManager->getSystemKeyPair();
         $account = $this->accountManager->getAccount($keyPair);
         $wasmToInstall = $wasmId ?? $this->wasmManager->getWasmId();
 
-        $createContractHostFunction = new CreateContractHostFunction(Address::fromAccountId($account->getAccountId()), $wasmToInstall);
+        $createContractHostFunction = new CreateContractWithConstructorHostFunction(
+            Address::fromAccountId($account->getAccountId()), 
+            $wasmToInstall,
+            $tokenArgs
+        );
 
         return $this->processInstallation($createContractHostFunction, $account, $keyPair);
     }

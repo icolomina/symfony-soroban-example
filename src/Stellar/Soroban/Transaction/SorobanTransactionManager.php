@@ -61,6 +61,7 @@ class SorobanTransactionManager {
         } while(!in_array($status, [GetTransactionResponse::STATUS_SUCCESS, GetTransactionResponse::STATUS_FAILED]));
 
         if($status === GetTransactionResponse::STATUS_FAILED) {
+            dump($transactionResponse);
             throw new \RuntimeException('Transaction Error: ' . $transactionResponse->getError());
         }
 

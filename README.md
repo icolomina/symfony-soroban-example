@@ -16,18 +16,18 @@ Building the image can take a few minutes so it has to install dependencies, dep
 
 ### Login to the application
 
-Open a browser and go to the login page: http://localhost:97/login and press the button. It will prompt your freighter wallet to log in. It will take a few seconds since the app mints the logged user 
-with tokens.
-After logging in, you will see a list of users (only one user). Copy the user address and press the "Create contract" link. It will open a page with a simple form:
+Open a browser and go to the login page: http://localhost:97 and press the button. You wll be redirected to the login page. Introduce the fllowing credentials:
 
-- Receiver: Paste here the address you've been copied
+- *user@test.com / test*
+
+After logging in, you will see a message which informs you that there is no created contract yet. Press in the "Create a contract" menu on the side menu. You will see a simple form with the following fields:
+
 - Label: A contract label
 - Description: A contract description
-- Token: The token to use. Copy the code in parentheses
+- Token: The token to use. **Copy the code in parentheses**
 
-Then, press the "Create contract" button. It will take a few seconds since it has to install and initialize the contract. After that, you will be redirected to a contract list page and you can see your
-recently created contract. 
+Fill the fields and the press the "Create contract" button. It will take a few seconds since it has to install the contract. After that, you will be redirected to a contract list page and you can see your recently created contract. 
 
 Now it's time to deposit some tokens. Press the "Send deposit" link. You will see a form field called amount. Write the amount you want to deposit (50 for example) and press the "Send deposit" button. After a few seconds, you will be redirected to the contract list and you will see that your contract balance has been increased (you will see 50). If you make another deposit, you will see 100 in the balance (the contract returns the current contract address balance).
 
-> Do not create more than one contract since the app always make the deposits over the same contract.
+> This app does not normalize the token decimals.

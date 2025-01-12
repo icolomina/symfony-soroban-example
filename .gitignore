@@ -20,4 +20,6 @@ yarn-error.log
 /contract/test_snapshots/
 /token/target/
 /token/test_snapshots/
+/migrations/
+/docker/
 ###< symfony/webpack-encore-bundle ###

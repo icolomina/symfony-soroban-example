@@ -12,7 +12,9 @@ use App\Stellar\Soroban\Contract\InteractManager;
 use App\Stellar\Soroban\Contract\WasmManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Soneso\StellarSDK\Crypto\KeyPair;
+use Soneso\StellarSDK\Soroban\Address;
 use Soneso\StellarSDK\Util\FriendBot;
+use Soneso\StellarSDK\Xdr\XdrSCVal;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -70,17 +72,23 @@ class SetupCommand extends Command
         $output->writeln('Token contract deployed - Wasm id: ' . $wasmTokenId);
 
         $output->writeln('Installing token contract ....');
-        $id = $this->installManager->installTokenContract($wasmTokenId);
+
+        $code =  mb_strtoupper(substr(str_shuffle(uniqid()), 0, 4));
+        $id = $this->installManager->installTokenContract(
+            [
+                Address::fromAccountId($account->getAccountId())->toXdrSCVal(),
+                XdrSCVal::forU32(4),
+                XdrSCVal::forString('MyToken'),
+                XdrSCVal::forString($code)
+            ],
+            $wasmTokenId
+        );
         $output->writeln('Token contract installed. Token Contract id: ' . $id);
 
         $token = new Token();
         $token->setAddress($id);
         $token->setCreatedAt(new \DateTimeImmutable());
         $token->setEnabled(true);
-
-        $code =  mb_strtoupper(substr(str_shuffle(uniqid($id)), 0, 4));
-        $this->interactManager->initToken($id, 4, 'MyToken', $code);
-
         $token->setCode($code);
         $token->setName('MyToken');
 
