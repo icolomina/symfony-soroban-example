@@ -1,61 +1,83 @@
 FROM ubuntu:latest
 
+# Set non-interactive mode for apt
 ARG DEBIAN_FRONTEND=noninteractive
-RUN apt-get update && apt-get upgrade -y
 
-RUN apt-get -y install apt-utils
-RUN apt-get -y install locales
+# Update and install required packages in a single RUN command
+RUN apt-get update && \
+    apt-get upgrade -y && \
+    apt-get install -y \
+        apt-utils \
+        locales \
+        software-properties-common \
+        nginx \
+        sqlite \
+        curl \
+        git 
+
+RUN add-apt-repository ppa:ondrej/php
+RUN apt-get update && \
+    apt-get install -y \ 
+    php8.2 \
+    php8.2-fpm \
+    php8.2-xml \
+    php8.2-mbstring \
+    php8.2-curl \
+    php8.2-gmp \
+    php8.2-gd \
+    php8.2-sqlite3 \
+    php8.2-bcmath 
+
+RUN apt-get clean 
+
 
 # Set the locale
 RUN locale-gen es_ES.UTF-8
-ENV LANG es_ES.UTF-8
-ENV LANGUAGE es_ES:en
 ENV LC_ALL es_ES.UTF-8
 
-RUN apt-get install -y software-properties-common
-RUN add-apt-repository ppa:ondrej/php
-RUN apt-get update
-RUN apt-get install -y nginx sqlite curl git php8.2 php8.2-fpm php8.2-xml php8.2-mbstring php8.2-curl php8.2-gmp php8.2-gd php8.2-sqlite3 php8.2-bcmath
-
+# Set working directory
 WORKDIR /var/www/crypto-bills-dapp
-COPY . /var/www/crypto-bills-dapp
 
-# Composer
-RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
-RUN php composer-setup.php
-RUN php -r "unlink('composer-setup.php');"
-RUN mv composer.phar /usr/local/bin/composer
+# Copy application files
+COPY . .
 
-# Node
-ENV NODE_VERSION=18.16.1
-RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
+# Install Composer
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+
+# Install Node.js using NVM
+ENV NODE_VERSION=20.0.0
 ENV NVM_DIR=/root/.nvm
-RUN . "$NVM_DIR/nvm.sh" && nvm install ${NODE_VERSION}
-RUN . "$NVM_DIR/nvm.sh" && nvm use v${NODE_VERSION}
-RUN . "$NVM_DIR/nvm.sh" && nvm alias default v${NODE_VERSION}
-ENV PATH="/root/.nvm/versions/node/v${NODE_VERSION}/bin/:${PATH}"
-RUN node --version
-RUN npm --version
+RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash && \
+    . "$NVM_DIR/nvm.sh" && \
+    nvm install ${NODE_VERSION} && \
+    nvm alias default v${NODE_VERSION} && \
+    ln -s "$NVM_DIR/versions/node/v${NODE_VERSION}/bin/node" /usr/local/bin/node && \
+    ln -s "$NVM_DIR/versions/node/v${NODE_VERSION}/bin/npm" /usr/local/bin/npm
 
-WORKDIR /var/www/crypto-bills-dapp
+# Verify Node.js and npm installation
+RUN node --version && npm --version
 
+# Install PHP dependencies
 ENV COMPOSER_ALLOW_SUPERUSER=1
-RUN composer install
-RUN bin/console cache:clear
-RUN bin/console doctrine:schema:drop --force
-RUN bin/console doctrine:schema:create
-RUN bin/console app:setup
-RUN npm install
-RUN npm run dev
+RUN composer install && \
+    bin/console cache:clear && \
+    bin/console doctrine:schema:drop --force && \
+    bin/console doctrine:schema:create && \
+    bin/console app:setup
 
-RUN rm /etc/nginx/sites-enabled/default
-COPY nginx/vhost.conf /etc/nginx/sites-available/
-RUN ln -s /etc/nginx/sites-available/vhost.conf /etc/nginx/sites-enabled/vhost.conf
+# Install Node.js dependencies
+RUN npm install && npm run dev
 
+# Configure Nginx
+RUN rm /etc/nginx/sites-enabled/default && \
+    cp nginx/vhost.conf /etc/nginx/sites-available/ && \
+    ln -s /etc/nginx/sites-available/vhost.conf /etc/nginx/sites-enabled/vhost.conf
+
+# Set permissions
 RUN chmod -R 777 var/
 
-# Define default command.
-CMD service php8.2-fpm start && nginx && tail -f /dev/null
+# Define default command
+CMD service php8.2-fpm start && nginx -g 'daemon off;'
 
-# Expose ports.
+# Expose ports
 EXPOSE 80
