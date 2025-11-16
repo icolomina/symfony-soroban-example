@@ -1,3 +1,7 @@
+> **⚠️ DEPRECATED**  
+> This project has been replaced by [Equillar](https://github.com/icolomina/equillar).  
+> This repository is kept for historical reference only.
+
 ## Introduction
 This repository contains a symfony project which can serve as a base to develop soroban dapps using such framework. The project relies on the [soneso php stellar sdk](https://github.com/Soneso/stellar-php-sdk) to deploy, install 
 and interact with the contract. 
@@ -29,5 +33,6 @@ After logging in, you will see a message which informs you that there is no crea
 Fill the fields and the press the "Create contract" button. It will take a few seconds since it has to install the contract. After that, you will be redirected to a contract list page and you can see your recently created contract. 
 
 Now it's time to deposit some tokens. Press the "Send deposit" link. You will see a form field called amount. Write the amount you want to deposit (50 for example) and press the "Send deposit" button. After a few seconds, you will be redirected to the contract list and you will see that your contract balance has been increased (you will see 50). If you make another deposit, you will see 100 in the balance (the contract returns the current contract address balance).
+
 
 > This app does not normalize the token decimals.
